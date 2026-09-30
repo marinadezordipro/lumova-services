@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  site:
+    image: ghcr.io/marinadezordipro/lumova-services:latest
+    networks:
+      - Agencia2025
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        order: start-first
+      labels:
+        - "traefik.enable=true"
+
+        # Router principal: lumova.com.br (canônico, sem www)
+        - "traefik.http.routers.lumova-services.entrypoints=websecure"
+        - "traefik.http.routers.lumova-services.rule=Host(`lumova.com.br`)"
+        - "traefik.http.routers.lumova-services.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.lumova-services.service=lumova-services"
+
+        # Router redirect: www.lumova.com.br -> lumova.com.br (301 permanent)
+        - "traefik.http.routers.lumova-services-www.entrypoints=websecure"
+        - "traefik.http.routers.lumova-services-www.rule=Host(`www.lumova.com.br`)"
+        - "traefik.http.routers.lumova-services-www.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.lumova-services-www.middlewares=redirect-www-to-root"
+        - "traefik.http.routers.lumova-services-www.service=lumova-services"
+
+        # Middleware do redirect
+        - "traefik.http.middlewares.redirect-www-to-root.redirectregex.regex=^https?://www\\.lumova\\.com\\.br/(.*)"
+        - "traefik.http.middlewares.redirect-www-to-root.redirectregex.replacement=https://lumova.com.br/$${1}"
+        - "traefik.http.middlewares.redirect-www-to-root.redirectregex.permanent=true"
+
+        # Serviço interno (Nginx escuta na porta 80)
+        - "traefik.http.services.lumova-services.loadbalancer.server.port=80"
+
+networks:
+  Agencia2025:
+    external: true

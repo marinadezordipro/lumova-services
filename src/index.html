@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serviços — Lumova</title>
+  <meta name="description" content="Diagnóstico, Assessoria e Radar CaptaGov. Processos inteligentes com IA responsável para empresas brasileiras." />
+
+  <!-- Favicons -->
+  <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/lumova_favicon_32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/lumova_favicon_180x180.png" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              DEFAULT: '#001226',
+              mid:     '#061A33',
+              border:  '#0D2540',
+              muted:   '#0A1C35',
+            },
+            orange: {
+              DEFAULT: '#F07820',
+              light:   '#F5921F',
+              dark:    '#D96A10',
+              glow:    '#FAA040',
+            },
+            blue: {
+              DEFAULT: '#4B7DFF',
+              light:   '#6B97FF',
+              dark:    '#2D60E0',
+              glow:    '#8BABFF',
+            },
+            snow:  '#F7FAFF',
+            cream: '#EDF2FF',
+            ink:   '#001226',
+            muted: '#8C95B8',
+          },
+          fontFamily: {
+            sans:    ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Space Grotesk"', 'Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter + Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    h1, h2, h3 { font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; }
+
+    /* ── Fundo hero com gradiente de luz ── */
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 30%, rgba(75,125,255,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(240,120,32,0.10) 0%, transparent 60%),
+        #001226;
+    }
+
+    /* ── Padrão de grade sutil ── */
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(75,125,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(75,125,255,0.05) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* ── Cards de serviço – layout vertical interativo ── */
+    .svc-card {
+      position: relative;
+      border: 1px solid #1E3252;
+      background: #0F1E38;
+      border-radius: 2px;
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    /* Barra lateral colorida */
+    .svc-card::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      transition: opacity 0.25s ease;
+    }
+    .svc-orange::after { background: linear-gradient(180deg, #F07820, #FAA040); }
+    .svc-blue::after   { background: linear-gradient(180deg, #4B7DFF, #8BABFF); }
+
+    .svc-orange:hover { border-color: rgba(240,120,32,0.35); box-shadow: 0 8px 40px rgba(240,120,32,0.07); }
+    .svc-blue:hover   { border-color: rgba(75,125,255,0.35);  box-shadow: 0 8px 40px rgba(75,125,255,0.07); }
+
+    /* Ícone de toggle ("+") */
+    .svc-toggle {
+      color: #8C95B8;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* Painel de detalhe – grid trick p/ transição suave de altura */
+    .svc-detail {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.42s cubic-bezier(0.4,0,0.2,1);
+    }
+    .svc-detail-inner { overflow: hidden; }
+    .svc-detail-body {
+      opacity: 0;
+      padding-top: 1.25rem;
+      margin-top: 1.25rem;
+      border-top: 1px solid #1E3252;
+      transition: opacity 0.28s ease 0.08s;
+    }
+
+    /* Estado ativo: hover (desktop) */
+    @media (hover: hover) {
+      .svc-card:hover .svc-detail         { grid-template-rows: 1fr; }
+      .svc-card:hover .svc-detail-body    { opacity: 1; }
+      .svc-card:hover .svc-toggle         { transform: rotate(45deg); }
+      .svc-orange:hover .svc-toggle       { color: #F07820; }
+      .svc-blue:hover   .svc-toggle       { color: #4B7DFF; }
+    }
+
+    /* Estado ativo: click (mobile) */
+    .svc-card.open .svc-detail      { grid-template-rows: 1fr; }
+    .svc-card.open .svc-detail-body { opacity: 1; }
+    .svc-card.open .svc-toggle      { transform: rotate(45deg); }
+    .svc-orange.open .svc-toggle    { color: #F07820; }
+    .svc-blue.open   .svc-toggle    { color: #4B7DFF; }
+
+    /* ── Conector dos passos ── */
+    .step-connector {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, #0D2540, #4B7DFF 50%, #0D2540);
+      opacity: 0.35;
+      margin-top: 2.4rem;
+      flex-shrink: 0;
+      min-width: 24px;
+    }
+
+    /* ── Animações de entrada ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Seção clara ── */
+    .section-light {
+      background: linear-gradient(180deg, #EDF2FF 0%, #F2F6FF 100%);
+    }
+
+    /* ── Cards da seção clara ── */
+    .svc-card {
+      background: #061A33;
+      border-color: #0D2540;
+    }
+  </style>
+</head>
+
+<body class="bg-navy text-snow antialiased">
+
+  <!-- ────────────────────────────────────────────────────
+       NAVEGAÇÃO
+  ─────────────────────────────────────────────────────── -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <a href="#" class="flex items-center gap-2 group">
+        <img src="/assets/lumova_horizontal_384x128.png"
+             alt="Lumova" class="h-14 w-auto" />
+      </a>
+
+      <a id="nav-cta" href="#contato"
+         class="text-sm font-medium text-orange hover:text-orange-glow border border-orange/30 hover:border-orange px-4 py-2 rounded-sm transition-all">
+        Agendar diagnóstico
+      </a>
+    </div>
+  </nav>
+
+  <!-- ────────────────────────────────────────────────────
+       HERO
+  ─────────────────────────────────────────────────────── -->
+  <section class="hero-bg grid-pattern relative min-h-screen flex items-center pt-24 pb-20 px-6 overflow-hidden">
+
+    <!-- Glow laranja inferior esq. -->
+    <div class="absolute bottom-0 left-0 w-[500px] h-[300px] pointer-events-none"
+         style="background: radial-gradient(ellipse at bottom left, rgba(240,120,32,0.12), transparent 70%);">
+    </div>
+    <!-- Glow azul superior dir. -->
+    <div class="absolute top-0 right-0 w-[600px] h-[400px] pointer-events-none"
+         style="background: radial-gradient(ellipse at top right, rgba(75,138,244,0.14), transparent 65%);">
+    </div>
+
+    <div class="max-w-6xl mx-auto w-full relative z-10">
+
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-3 mb-10">
+        <span class="w-8 h-px bg-orange"></span>
+        <span id="hero-badge" class="text-orange text-xs font-medium tracking-[0.3em] uppercase"></span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="mb-8 max-w-4xl">
+        <span id="hero-h1" class="block text-5xl sm:text-6xl lg:text-7xl font-light leading-[1.05] text-snow"></span>
+        <span id="hero-h2" class="block text-5xl sm:text-6xl lg:text-7xl font-light leading-[1.05] text-orange"></span>
+      </h1>
+
+      <!-- Subtítulo -->
+      <p id="hero-sub" class="text-muted text-xl sm:text-2xl font-light leading-relaxed max-w-2xl mb-14"></p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a id="hero-cta1" href="#contato"
+           class="inline-flex items-center justify-center gap-3 bg-orange hover:bg-orange-light text-ink font-medium px-8 py-4 rounded-sm transition-colors">
+          <span id="hero-cta1-text"></span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a id="hero-cta2" href="https://radarcaptagov.com.br" target="_blank" rel="noopener"
+           class="inline-flex items-center justify-center gap-3 border border-navy-border text-snow hover:border-blue hover:text-blue px-8 py-4 rounded-sm transition-all">
+          <span id="hero-cta2-text"></span>
+          <svg class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Tagline da marca -->
+      <div class="mt-20 flex items-center gap-3 opacity-30">
+        <span class="text-xs tracking-[0.35em] uppercase text-snow">IA</span>
+        <span class="text-orange text-xs">●</span>
+        <span class="text-xs tracking-[0.35em] uppercase text-snow">Processos</span>
+        <span class="text-blue text-xs">●</span>
+        <span class="text-xs tracking-[0.35em] uppercase text-snow">Resultados</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────
+       SERVIÇOS — 3 CARDS
+  ─────────────────────────────────────────────────────── -->
+  <section class="section-light py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Cabeçalho -->
+      <div class="mb-16 fade-up">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <span class="w-6 h-px bg-orange"></span>
+          <span id="sec-badge" class="text-orange text-xs font-medium tracking-[0.3em] uppercase"></span>
+        </div>
+        <h2 id="sec-titulo" class="text-4xl sm:text-5xl font-light text-ink leading-tight mb-4"></h2>
+        <p id="sec-sub" class="text-ink/50 text-lg font-light max-w-xl"></p>
+      </div>
+
+      <!-- Cards verticais — cada serviço independente -->
+      <div class="space-y-4">
+
+        <!-- Diagnóstico -->
+        <div class="svc-card svc-orange fade-up" style="transition-delay:0.1s">
+          <div class="pl-7 pr-6 pt-6 pb-6">
+            <div class="flex items-start justify-between gap-6">
+              <div class="flex-1 min-w-0">
+                <span class="inline-block text-xs text-orange border border-orange/30 px-2.5 py-1 rounded-full mb-4 font-medium tracking-wide">Serviço</span>
+                <h3 id="d-nome" class="text-2xl sm:text-3xl font-medium text-snow mb-2 leading-snug"></h3>
+                <p id="d-tagline" class="text-orange/80 text-sm font-light leading-relaxed"></p>
+              </div>
+              <div class="svc-toggle mt-1 cursor-pointer" aria-label="Ver detalhes">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16"/>
+                </svg>
+              </div>
+            </div>
+            <div class="svc-detail">
+              <div class="svc-detail-inner">
+                <div class="svc-detail-body">
+                  <p id="d-desc" class="text-muted text-sm leading-relaxed mb-5"></p>
+                  <ul id="d-lista" class="space-y-2.5 mb-6"></ul>
+                  <a id="d-cta" href="#contato"
+                     class="inline-flex items-center gap-2 text-sm font-medium bg-orange hover:bg-orange-light text-ink px-6 py-3 rounded-sm transition-colors">
+                    <span id="d-cta-text"></span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assessoria -->
+        <div class="svc-card svc-orange fade-up" style="transition-delay:0.2s">
+          <div class="pl-7 pr-6 pt-6 pb-6">
+            <div class="flex items-start justify-between gap-6">
+              <div class="flex-1 min-w-0">
+                <span class="inline-block text-xs text-orange border border-orange/30 px-2.5 py-1 rounded-full mb-4 font-medium tracking-wide">Serviço</span>
+                <h3 id="a-nome" class="text-2xl sm:text-3xl font-medium text-snow mb-2 leading-snug"></h3>
+                <p id="a-tagline" class="text-orange/80 text-sm font-light leading-relaxed"></p>
+              </div>
+              <div class="svc-toggle mt-1 cursor-pointer" aria-label="Ver detalhes">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16"/>
+                </svg>
+              </div>
+            </div>
+            <div class="svc-detail">
+              <div class="svc-detail-inner">
+                <div class="svc-detail-body">
+                  <p id="a-desc" class="text-muted text-sm leading-relaxed mb-5"></p>
+                  <ul id="a-lista" class="space-y-2.5 mb-6"></ul>
+                  <a id="a-cta" href="#contato"
+                     class="inline-flex items-center gap-2 text-sm font-medium bg-orange hover:bg-orange-light text-ink px-6 py-3 rounded-sm transition-colors">
+                    <span id="a-cta-text"></span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radar CaptaGov -->
+        <div class="svc-card svc-blue fade-up" style="transition-delay:0.3s">
+          <div class="pl-7 pr-6 pt-6 pb-6">
+            <div class="flex items-start justify-between gap-6">
+              <div class="flex-1 min-w-0">
+                <span id="r-badge-el" class="inline-block text-xs text-blue border border-blue/30 px-2.5 py-1 rounded-full mb-4 font-medium tracking-wide"></span>
+                <h3 id="r-nome" class="text-2xl sm:text-3xl font-medium text-snow mb-2 leading-snug"></h3>
+                <p id="r-tagline" class="text-blue/80 text-sm font-light leading-relaxed"></p>
+              </div>
+              <div class="svc-toggle mt-1 cursor-pointer" aria-label="Ver detalhes">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8-8h16"/>
+                </svg>
+              </div>
+            </div>
+            <div class="svc-detail">
+              <div class="svc-detail-inner">
+                <div class="svc-detail-body">
+                  <p id="r-desc" class="text-muted text-sm leading-relaxed mb-5"></p>
+                  <ul id="r-lista" class="space-y-2.5 mb-6"></ul>
+                  <a id="r-cta" href="https://radarcaptagov.com.br" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 text-sm font-medium bg-blue hover:bg-blue-light text-ink px-6 py-3 rounded-sm transition-colors">
+                    <span id="r-cta-text"></span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────
+       COMO FUNCIONA — 3 PASSOS
+  ─────────────────────────────────────────────────────── -->
+  <section class="bg-navy py-24 px-6 border-t border-navy-border">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-16 fade-up">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <span class="w-6 h-px bg-orange"></span>
+          <span id="cf-badge" class="text-orange text-xs font-medium tracking-[0.3em] uppercase"></span>
+          <span class="w-6 h-px bg-orange"></span>
+        </div>
+        <h2 id="cf-titulo" class="text-4xl sm:text-5xl font-light text-snow mb-4"></h2>
+        <p id="cf-sub" class="text-muted text-lg font-light max-w-md mx-auto"></p>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-start gap-0" id="passos-container"></div>
+
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────
+       CTA FINAL
+  ─────────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden py-24 px-6"
+           style="background: linear-gradient(135deg, #F07820 0%, #D96A10 60%, #C05A08 100%);">
+    <div class="absolute inset-0 grid-pattern opacity-10 pointer-events-none"></div>
+    <div class="max-w-3xl mx-auto text-center relative z-10 fade-up">
+      <h2 id="ctaf-titulo" class="text-4xl sm:text-5xl font-light text-ink leading-tight mb-6"></h2>
+      <p id="ctaf-sub" class="text-ink/70 text-xl font-light mb-12"></p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+        <a id="ctaf-btn" href="#contato"
+           class="inline-flex items-center gap-3 bg-navy hover:bg-navy-mid text-snow font-medium px-10 py-4 rounded-sm transition-colors">
+          <span id="ctaf-btn-text"></span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a id="ctaf-sec" href="#contato"
+           class="text-ink/70 hover:text-ink text-sm transition-colors">
+          <span id="ctaf-sec-text"></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────
+       CONTATO  (âncora #contato)
+  ─────────────────────────────────────────────────────── -->
+  <section id="contato" class="bg-navy-muted py-24 px-6 border-t border-navy-border">
+    <div class="max-w-2xl mx-auto text-center fade-up">
+      <h2 id="cont-titulo" class="text-4xl font-light text-snow mb-4"></h2>
+      <p id="cont-sub" class="text-muted text-lg font-light mb-12"></p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a id="cont-wa" href="#"
+           class="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1db954] text-white font-medium px-8 py-4 rounded-sm transition-colors">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          <span id="cont-wa-text"></span>
+        </a>
+        <a id="cont-email" href="#"
+           class="inline-flex items-center gap-3 border border-navy-border hover:border-blue text-muted hover:text-blue px-8 py-4 rounded-sm transition-all">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          <span id="cont-email-text"></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────────────────────
+       FOOTER
+  ─────────────────────────────────────────────────────── -->
+  <footer class="bg-navy border-t border-navy-border py-10 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <img src="/assets/lumova_horizontal_384x128.png"
+           alt="Lumova" class="h-6 w-auto opacity-70" />
+      <p id="footer-tagline" class="text-muted text-sm italic"></p>
+      <p id="footer-copy" class="text-muted/40 text-xs"></p>
+    </div>
+  </footer>
+
+
+  <!-- ================================================================
+       CONTEÚDO — EDITE AQUI
+       Altere os textos abaixo. Salve e recarregue o navegador.
+       Não altere os nomes das chaves (ex: badge:, tagline:, etc.)
+  ================================================================= -->
+  <script>
+  const C = {
+
+    nav: {
+      cta:      "Agendar diagnóstico",
+      cta_href: "#contato",
+    },
+
+    hero: {
+      badge: "O que fazemos",
+      h1:    "Processos inteligentes.",
+      h2:    "Resultado em cada etapa.",
+      sub:   "Da análise ao acompanhamento, construímos junto com você a forma certa de aplicar IA no seu negócio — sem promessa vazia, sem consultoria que some.",
+      cta1:     "Agende uma conversa gratuita",
+      cta1_url: "#contato",
+      cta2:     "Conheça o Radar CaptaGov",
+      cta2_url: "https://radarcaptagov.com.br",
+    },
+
+    secao_servicos: {
+      badge:  "Nossas ofertas",
+      titulo: "O que a Lumova faz pelo seu negócio",
+      sub:    "Cada serviço é uma etapa de uma jornada — do diagnóstico à transformação real.",
+    },
+
+    diagnostico: {
+      nome:    "Diagnóstico de Processos",
+      tagline: "Entenda onde a IA pode gerar impacto real — antes de investir qualquer real.",
+      desc:    "Mapeamos seus processos, identificamos gargalos e sinalizamos onde a inteligência artificial e a automação geram eficiência mensurável. Conduzido com olhar de negócio, não de tecnologia.",
+      lista: [
+        "Mapeamento dos processos operacionais críticos",
+        "Identificação de gargalos e pontos de desperdício",
+        "Diagnóstico de maturidade digital",
+        "Mapa de oportunidades de IA com priorização",
+        "Relatório com próximos passos recomendados",
+      ],
+      cta:     "Agende uma conversa gratuita",
+      cta_url: "#contato",
+    },
+
+    assessoria: {
+      nome:    "Assessoria em IA",
+      tagline: "Da solução certa à adoção real — acompanhamos cada etapa da implementação.",
+      desc:    "Construímos e implementamos as soluções identificadas. Cada etapa tem métrica de sucesso. Só avançamos quando o passo anterior está funcionando.",
+      lista: [
+        "Desenho da solução aprovado por você em cada etapa",
+        "Implementação com acompanhamento contínuo",
+        "Treinamento da equipe incluso no processo",
+        "Documentação de todos os fluxos criados",
+        "Métricas definidas no kickoff e monitoradas",
+      ],
+      cta:     "Fale com a gente",
+      cta_url: "#contato",
+    },
+
+    radar: {
+      badge:   "Produto",
+      nome:    "Radar CaptaGov",
+      tagline: "Inteligência para prefeituras captarem recursos públicos com mais eficiência.",
+      desc:    "Plataforma que monitora editais, avalia aderência automaticamente e apoia a elaboração de projetos com IA — tudo em um único ambiente.",
+      lista: [
+        "Monitoramento automatizado de editais e programas federais",
+        "Avaliação de aderência por perfil do município",
+        "Elaboração de projetos assistida por IA",
+        "Dashboard centralizado com alertas e histórico",
+      ],
+      cta:     "Conhecer o Radar CaptaGov",
+      cta_url: "https://radarcaptagov.com.br",
+    },
+
+    como_funciona: {
+      badge:  "Como funciona",
+      titulo: "Um processo simples e estruturado.",
+      sub:    "Do diagnóstico ao resultado — passo a passo.",
+      passos: [
+        {
+          num:  "1",
+          nome: "Diagnóstico",
+          desc: "Entendemos o negócio, mapeamos os processos e identificamos onde a IA gera impacto real.",
+        },
+        {
+          num:  "2",
+          nome: "Desenho",
+          desc: "Construímos juntos a solução certa. Você aprova cada etapa antes da implementação.",
+        },
+        {
+          num:  "3",
+          nome: "Implementação",
+          desc: "Executamos, medimos e ajustamos. Só avançamos quando o resultado anterior está confirmado.",
+        },
+      ],
+    },
+
+    cta_final: {
+      titulo:  "Pronto para entender como a IA pode mudar a sua operação?",
+      sub:     "Uma conversa de 30 minutos para entender o seu negócio. Sem compromisso.",
+      btn:     "Agende uma conversa gratuita",
+      btn_url: "#contato",
+      sec:     "ou entre em contato",
+      sec_url: "#contato",
+    },
+
+    contato: {
+      titulo:   "Vamos conversar?",
+      sub:      "Escolha a forma mais fácil para você.",
+      // ↓ Substitua pelo número real do WhatsApp
+      wa_url:   "https://wa.me/5500000000000?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20diagn%C3%B3stico%20com%20a%20Lumova.",
+      wa_texto: "Falar no WhatsApp",
+      // ↓ Substitua pelo e-mail correto
+      email:    "contato@lumova.com.br",
+    },
+
+    footer: {
+      tagline:   "IA • Processos • Resultados",
+      copyright: "© 2026 Lumova. Todos os direitos reservados.",
+    },
+
+  };
+  </script>
+
+  <!-- ================================================================
+       ENGINE — não edite abaixo desta linha
+  ================================================================= -->
+  <script>
+  (function () {
+
+    function set(id, text) {
+      const el = document.getElementById(id);
+      if (el && text !== undefined) el.textContent = text;
+    }
+    function href(id, url) {
+      const el = document.getElementById(id);
+      if (el && url) el.setAttribute('href', url);
+    }
+    function buildList(id, items, accent) {
+      const ul = document.getElementById(id);
+      if (!ul || !items) return;
+      const color = accent === 'blue' ? 'text-blue' : 'text-orange';
+      ul.innerHTML = items.map(item => `
+        <li class="flex items-start gap-2.5 text-sm text-muted">
+          <span class="${color} mt-0.5 flex-shrink-0 font-bold">→</span>
+          <span>${item}</span>
+        </li>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // Nav
+      set('nav-cta', C.nav.cta);
+      href('nav-cta', C.nav.cta_href);
+
+      // Hero
+      set('hero-badge',     C.hero.badge);
+      set('hero-h1',        C.hero.h1);
+      set('hero-h2',        C.hero.h2);
+      set('hero-sub',       C.hero.sub);
+      set('hero-cta1-text', C.hero.cta1);
+      set('hero-cta2-text', C.hero.cta2);
+      href('hero-cta1',     C.hero.cta1_url);
+      href('hero-cta2',     C.hero.cta2_url);
+
+      // Seção serviços
+      set('sec-badge',  C.secao_servicos.badge);
+      set('sec-titulo', C.secao_servicos.titulo);
+      set('sec-sub',    C.secao_servicos.sub);
+
+      // Diagnóstico
+      set('d-nome',     C.diagnostico.nome);
+      set('d-tagline',  C.diagnostico.tagline);
+      set('d-desc',     C.diagnostico.desc);
+      set('d-cta-text', C.diagnostico.cta);
+      buildList('d-lista', C.diagnostico.lista, 'orange');
+      href('d-cta', C.diagnostico.cta_url);
+
+      // Assessoria
+      set('a-nome',     C.assessoria.nome);
+      set('a-tagline',  C.assessoria.tagline);
+      set('a-desc',     C.assessoria.desc);
+      set('a-cta-text', C.assessoria.cta);
+      buildList('a-lista', C.assessoria.lista, 'orange');
+      href('a-cta', C.assessoria.cta_url);
+
+      // Radar
+      set('r-badge-el', C.radar.badge);
+      set('r-nome',     C.radar.nome);
+      set('r-tagline',  C.radar.tagline);
+      set('r-desc',     C.radar.desc);
+      set('r-cta-text', C.radar.cta);
+      buildList('r-lista', C.radar.lista, 'blue');
+      href('r-cta', C.radar.cta_url);
+
+      // Como funciona
+      set('cf-badge',  C.como_funciona.badge);
+      set('cf-titulo', C.como_funciona.titulo);
+      set('cf-sub',    C.como_funciona.sub);
+
+      const passosEl = document.getElementById('passos-container');
+      if (passosEl) {
+        const passos = C.como_funciona.passos;
+        passosEl.innerHTML = passos.map((p, i) => `
+          <div class="flex-1 fade-up px-2 md:px-6 py-4" style="transition-delay:${0.1 + i * 0.15}s">
+            <div class="text-6xl font-light mb-4 font-display" style="color:rgba(240,120,32,0.22)">${p.num}</div>
+            <div class="w-8 h-px bg-orange mb-4"></div>
+            <h3 class="text-xl font-medium text-snow mb-3">${p.nome}</h3>
+            <p class="text-muted text-sm font-light leading-relaxed">${p.desc}</p>
+          </div>
+          ${i < passos.length - 1 ? '<div class="step-connector hidden md:block"></div>' : ''}
+        `).join('');
+        passosEl.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+      }
+
+      // CTA Final
+      set('ctaf-titulo',   C.cta_final.titulo);
+      set('ctaf-sub',      C.cta_final.sub);
+      set('ctaf-btn-text', C.cta_final.btn);
+      set('ctaf-sec-text', C.cta_final.sec);
+      href('ctaf-btn', C.cta_final.btn_url);
+      href('ctaf-sec', C.cta_final.sec_url);
+
+      // Contato
+      set('cont-titulo',     C.contato.titulo);
+      set('cont-sub',        C.contato.sub);
+      set('cont-wa-text',    C.contato.wa_texto);
+      set('cont-email-text', C.contato.email);
+      href('cont-wa',    C.contato.wa_url);
+      href('cont-email', 'mailto:' + C.contato.email);
+
+      // Footer
+      set('footer-tagline', C.footer.tagline);
+      set('footer-copy',    C.footer.copyright);
+
+    });
+
+    // Interação dos cards — clique em dispositivos sem hover
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.svc-card').forEach(card => {
+        card.addEventListener('click', () => {
+          if (!window.matchMedia('(hover: hover)').matches) {
+            card.classList.toggle('open');
+          }
+        });
+      });
+    });
+
+    // Nav — efeito ao rolar
+    window.addEventListener('scroll', function () {
+      const nav = document.getElementById('nav');
+      if (window.scrollY > 40) {
+        nav.style.background = 'rgba(0,18,38,0.94)';
+        nav.style.backdropFilter = 'blur(14px)';
+        nav.style.borderBottom = '1px solid #0D2540';
+      } else {
+        nav.style.background = '';
+        nav.style.backdropFilter = '';
+        nav.style.borderBottom = '';
+      }
+    });
+
+    // Animações de entrada ao rolar
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
