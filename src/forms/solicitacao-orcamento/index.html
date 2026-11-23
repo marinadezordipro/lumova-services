@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitação de orçamento | Lumova</title>
+  <meta name="description" content="Conte sobre o processo que você quer automatizar e receba um orçamento prévio da Lumova." />
+  <meta name="theme-color" content="#001226" />
+
+  <link rel="icon" href="../../assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/lumova_favicon_32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/lumova_favicon_180x180.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ═════════════ HEADER ═════════════ -->
+  <header class="header" id="topo">
+    <div class="container header__inner">
+      <a href="../../index.html" class="header__logo" aria-label="Lumova, voltar ao site">
+        <img src="../../assets/lumova-logo.png" alt="Lumova · IA, Processos, Resultados" width="1200" height="400" />
+      </a>
+      <a href="../../index.html" class="btn btn--ghost btn--sm header__back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Voltar ao site
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═════════════ HERO ═════════════ -->
+    <section class="hero">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div>
+          <p class="eyebrow reveal">
+            <span>Orçamento</span><i class="dot dot--orange"></i><span>Processo</span><i class="dot dot--blue"></i><span>Automação</span>
+          </p>
+          <h1 class="hero__title reveal">
+            Conte sobre o <em>processo</em> que você quer transformar.
+          </h1>
+          <p class="hero__sub reveal">
+            Em poucos passos, entendemos o processo como acontece hoje e enviamos um orçamento prévio.
+            Nenhum detalhe é pequeno demais, nenhuma descrição é longa demais.
+          </p>
+          <ul class="hero__hints reveal">
+            <li><span class="dot dot--orange"></span> 5 a 10 minutos para preencher</li>
+            <li><span class="dot dot--blue"></span> Progresso salvo automaticamente</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════════ FORMULÁRIO ═════════════ -->
+    <section class="section" aria-labelledby="form-title">
+      <div class="container">
+
+        <!-- Progresso -->
+        <div class="wizard__progress reveal">
+          <div class="wizard__count">
+            <span class="wizard__count-num"><b id="step-current">1</b> / <span id="step-total">6</span></span>
+            <span class="wizard__count-label" id="step-label">Contato</span>
+          </div>
+          <div class="wizard__bar" aria-hidden="true"><span id="step-bar"></span></div>
+          <button type="button" class="wizard__save" id="btn-save" title="Rascunho salvo automaticamente no seu navegador">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Rascunho salvo</span>
+          </button>
+        </div>
+
+        <!-- Navegação por etapas (chips clicáveis) -->
+        <ol class="wizard__tabs reveal" role="tablist" aria-label="Etapas do orçamento">
+          <li><button role="tab" class="is-active" data-goto="0"><span>01</span> Contato</button></li>
+          <li><button role="tab" data-goto="1"><span>02</span> Empresa</button></li>
+          <li><button role="tab" data-goto="2"><span>03</span> Sistemas</button></li>
+          <li><button role="tab" data-goto="3"><span>04</span> Processo</button></li>
+          <li><button role="tab" data-goto="4"><span>05</span> Volume</button></li>
+          <li><button role="tab" data-goto="5"><span>06</span> Anexos importantes</button></li>
+        </ol>
+
+        <form class="wizard" id="orc-form" novalidate>
+          <h2 id="form-title" class="visually-hidden">Solicitação de orçamento</h2>
+
+          <!-- ───── ETAPA 1 · CONTATO ───── -->
+          <section class="step is-active" data-step="0" aria-labelledby="s1-title">
+            <div class="step__head">
+              <p class="kicker">Etapa 1</p>
+              <h3 id="s1-title">Quem é você?</h3>
+              <p class="step__sub">Vamos usar esses dados só para retornar com o orçamento.</p>
+            </div>
+            <div class="step__grid">
+              <label class="field">
+                <span>Nome completo *</span>
+                <input type="text" name="nome" id="f-nome" autocomplete="name" required />
+              </label>
+              <label class="field">
+                <span>E-mail *</span>
+                <input type="email" name="email" id="f-email" autocomplete="email" required />
+              </label>
+              <label class="field">
+                <span>WhatsApp / Telefone *</span>
+                <input type="tel" name="telefone" id="f-telefone" autocomplete="tel" placeholder="(54) 99999-9999" required />
+              </label>
+              <label class="field">
+                <span>Seu cargo</span>
+                <input type="text" name="cargo" id="f-cargo" placeholder="ex.: Gerente Financeiro" />
+              </label>
+            </div>
+          </section>
+
+          <!-- ───── ETAPA 2 · EMPRESA ───── -->
+          <section class="step" data-step="1" aria-labelledby="s2-title" hidden>
+            <div class="step__head">
+              <p class="kicker">Etapa 2</p>
+              <h3 id="s2-title">Sobre a empresa</h3>
+              <p class="step__sub">Vamos entender sobre a sua empresa.</p>
+            </div>
+            <div class="step__grid">
+              <label class="field field--full">
+                <span>Nome da empresa *</span>
+                <input type="text" name="empresa" id="f-empresa" autocomplete="organization" required />
+              </label>
+              <label class="field">
+                <span>Site</span>
+                <input type="url" name="site" id="f-site" placeholder="https://" />
+              </label>
+              <label class="field">
+                <span>Cidade / Estado *</span>
+                <input type="text" name="cidade" id="f-cidade" placeholder="Caxias do Sul / RS" required />
+              </label>
+              <label class="field field--full">
+                <span>Setor da empresa</span>
+                <div class="chips" data-chip-group="setor">
+                  <label><input type="radio" name="setor" value="Indústria" /><span>Indústria</span></label>
+                  <label><input type="radio" name="setor" value="Comércio / Varejo" /><span>Comércio / Varejo</span></label>
+                  <label><input type="radio" name="setor" value="Serviços" /><span>Serviços</span></label>
+                  <label><input type="radio" name="setor" value="Contabilidade" /><span>Contabilidade</span></label>
+                  <label><input type="radio" name="setor" value="BPO" /><span>BPO</span></label>
+                  <label><input type="radio" name="setor" value="Agronegócio" /><span>Agronegócio</span></label>
+                  <label><input type="radio" name="setor" value="Construção" /><span>Construção</span></label>
+                  <label><input type="radio" name="setor" value="Saúde" /><span>Saúde</span></label>
+                  <label><input type="radio" name="setor" value="Educação" /><span>Educação</span></label>
+                  <label><input type="radio" name="setor" value="Transporte / Logística" /><span>Transporte / Logística</span></label>
+                  <label><input type="radio" name="setor" value="Tecnologia" /><span>Tecnologia</span></label>
+                  <label><input type="radio" name="setor" value="Outro" /><span>Outro</span></label>
+                </div>
+              </label>
+              <label class="field field--full">
+                <span>Porte (nº de colaboradores) *</span>
+                <div class="chips" data-chip-group="porte">
+                  <label><input type="radio" name="porte" value="1-10" required /><span>1 a 10</span></label>
+                  <label><input type="radio" name="porte" value="11-50" required /><span>11 a 50</span></label>
+                  <label><input type="radio" name="porte" value="51-200" required /><span>51 a 200</span></label>
+                  <label><input type="radio" name="porte" value="201-500" required /><span>201 a 500</span></label>
+                  <label><input type="radio" name="porte" value="500+" required /><span>+ de 500</span></label>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <!-- ───── ETAPA 3 · SISTEMAS / ERP ───── -->
+          <section class="step" data-step="2" aria-labelledby="s3-title" hidden>
+            <div class="step__head">
+              <p class="kicker">Etapa 3</p>
+              <h3 id="s3-title">Que sistemas participam do processo?</h3>
+              <p class="step__sub">Quanto mais específico, melhor desenhamos a solução: não se preocupe com a exatidão.</p>
+            </div>
+            <div class="step__grid">
+              <label class="field field--full">
+                <span>ERP principal</span>
+                <input type="text" name="erp" id="f-erp" list="erp-opts" placeholder="Comece a digitar: TOTVS, SAP, Senior..." autocomplete="off" />
+                <datalist id="erp-opts">
+                  <option value="TOTVS Protheus"></option>
+                  <option value="TOTVS Datasul"></option>
+                  <option value="TOTVS RM"></option>
+                  <option value="TOTVS Winthor"></option>
+                  <option value="SAP S/4HANA"></option>
+                  <option value="SAP Business One"></option>
+                  <option value="Senior Sistemas"></option>
+                  <option value="Sankhya"></option>
+                  <option value="Omie"></option>
+                  <option value="Bling"></option>
+                  <option value="Conta Azul"></option>
+                  <option value="Tiny ERP"></option>
+                  <option value="Nomus"></option>
+                  <option value="Microsiga"></option>
+                  <option value="Oracle NetSuite"></option>
+                  <option value="Microsoft Dynamics 365"></option>
+                  <option value="GestãoClick"></option>
+                  <option value="Nasajon"></option>
+                  <option value="Alterdata"></option>
+                  <option value="Domínio Sistemas"></option>
+                  <option value="Fortes"></option>
+                  <option value="Questor"></option>
+                  <option value="Mega Sistemas"></option>
+                  <option value="RADAR Sistemas"></option>
+                  <option value="JDE Edwards"></option>
+                  <option value="Infor LN"></option>
+                  <option value="Não usamos ERP"></option>
+                </datalist>
+              </label>
+              <label class="field">
+                <span>Tipo de acesso ao ERP</span>
+                <div class="chips chips--radio" data-chip-group="erp_tipo">
+                  <label><input type="radio" name="erp_tipo" value="Web (navegador)" /><span>Web</span></label>
+                  <label><input type="radio" name="erp_tipo" value="Desktop (instalado)" /><span>Desktop</span></label>
+                  <label><input type="radio" name="erp_tipo" value="Híbrido (web + desktop)" /><span>Híbrido</span></label>
+                  <label><input type="radio" name="erp_tipo" value="Mobile (app)" /><span>Mobile</span></label>
+                  <label><input type="radio" name="erp_tipo" value="Não sei" /><span>Não sei</span></label>
+                </div>
+              </label>
+              <label class="field">
+                <span>Possui API / integrações abertas?</span>
+                <div class="chips chips--radio" data-chip-group="erp_api">
+                  <label><input type="radio" name="erp_api" value="Sim" /><span>Sim</span></label>
+                  <label><input type="radio" name="erp_api" value="Parcial" /><span>Parcial</span></label>
+                  <label><input type="radio" name="erp_api" value="Não" /><span>Não</span></label>
+                  <label><input type="radio" name="erp_api" value="Não sei" /><span>Não sei</span></label>
+                </div>
+              </label>
+              <label class="field field--full">
+                <span>Outras ferramentas que fazem parte do processo</span>
+                <small>Marque todas que se aplicam. Ajuda a entender onde a informação circula.</small>
+                <div class="chips chips--multi" data-chip-group="ferramentas">
+                  <label><input type="checkbox" name="ferramentas" value="Excel / Google Sheets" /><span>Excel / Sheets</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="E-mail (Outlook / Gmail)" /><span>E-mail</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="WhatsApp" /><span>WhatsApp</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="CRM" /><span>CRM</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="Sistema do banco" /><span>Banco</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="Portal do governo (eCAC, SEFAZ, etc.)" /><span>Portais do governo</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="Power BI / Metabase / Looker" /><span>BI</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="SharePoint / Drive" /><span>Drive / SharePoint</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="Sistema próprio" /><span>Sistema próprio</span></label>
+                  <label><input type="checkbox" name="ferramentas" value="Papel / formulário físico" /><span>Papel</span></label>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <!-- ───── ETAPA 4 · PROCESSO ───── -->
+          <section class="step" data-step="3" aria-labelledby="s4-title" hidden>
+            <div class="step__head">
+              <p class="kicker">Etapa 4</p>
+              <h3 id="s4-title">O processo</h3>
+              <p class="step__sub">Descreva como o trabalho acontece de verdade.</p>
+            </div>
+
+            <div class="step__grid">
+              <label class="field field--full">
+                <span>Área da empresa *</span>
+                <select name="area" id="f-area" required>
+                  <option value="" disabled selected>Selecione a área</option>
+                  <optgroup label="Financeiro">
+                    <option>Contas a Pagar</option>
+                    <option>Contas a Receber</option>
+                    <option>Tesouraria / Fluxo de Caixa</option>
+                    <option>Conciliação Bancária</option>
+                    <option>Faturamento</option>
+                    <option>Cobrança</option>
+                  </optgroup>
+                  <optgroup label="Contabilidade & Fiscal">
+                    <option>Contabilidade</option>
+                    <option>Fiscal / Impostos</option>
+                    <option>Obrigações acessórias (SPED, DCTF, etc.)</option>
+                    <option>Auditoria</option>
+                  </optgroup>
+                  <optgroup label="Pessoas">
+                    <option>RH / Departamento Pessoal</option>
+                    <option>Folha de pagamento</option>
+                    <option>Recrutamento</option>
+                  </optgroup>
+                  <optgroup label="Comercial & Operações">
+                    <option>Vendas / Comercial</option>
+                    <option>Atendimento ao cliente / SAC</option>
+                    <option>Pós-venda</option>
+                    <option>Compras / Suprimentos</option>
+                    <option>Estoque / Almoxarifado</option>
+                    <option>Logística / Expedição</option>
+                    <option>Produção / PCP</option>
+                  </optgroup>
+                  <optgroup label="Outros">
+                    <option>Marketing</option>
+                    <option>TI</option>
+                    <option>Jurídico</option>
+                    <option>Diretoria / Gestão</option>
+                    <option>Outro</option>
+                  </optgroup>
+                </select>
+              </label>
+
+              <label class="field field--full">
+                <span>Nome do processo *</span>
+                <input type="text" name="processo_nome" id="f-processo-nome" placeholder="ex.: Lançamento de notas de serviço no ERP" required />
+              </label>
+
+              <label class="field field--full">
+                <span>Em uma frase, o que esse processo precisa entregar?</span>
+                <textarea name="processo_objetivo" id="f-processo-objetivo" rows="2" placeholder="ex.: Garantir que toda nota recebida seja lançada e paga dentro do prazo."></textarea>
+              </label>
+
+              <!-- Construtor de etapas: uma linha por etapa, descrição livre e objetiva -->
+              <div class="field field--full step-builder">
+                <span>Etapas do processo, passo a passo</span>
+                <small>Descreva de forma objetiva o que acontece em cada etapa. Uma por vez.</small>
+
+                <ol class="builder__list" id="builder-list">
+                  <!-- preenchido dinamicamente -->
+                </ol>
+
+                <button type="button" class="builder__add" id="builder-add">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  Adicionar etapa
+                </button>
+              </div>
+
+              <label class="field field--full">
+                <span>Em poucas linhas, qual problema você quer resolver? *</span>
+                <small>Descreva com suas palavras — a dor, o incômodo, o que acontece de errado hoje.</small>
+                <textarea name="problema" id="f-problema" rows="3" placeholder="ex.: Perdemos horas por semana lançando notas manualmente no ERP e ainda assim escapa erro." required></textarea>
+              </label>
+
+              <label class="field field--full">
+                <span>Principais dores desse processo hoje</span>
+                <div class="chips chips--multi" data-chip-group="dores">
+                  <label><input type="checkbox" name="dores" value="Muitos erros manuais" /><span>Erros manuais</span></label>
+                  <label><input type="checkbox" name="dores" value="Retrabalho frequente" /><span>Retrabalho</span></label>
+                  <label><input type="checkbox" name="dores" value="Lento demais" /><span>Lentidão</span></label>
+                  <label><input type="checkbox" name="dores" value="Perda de prazos" /><span>Perda de prazos</span></label>
+                  <label><input type="checkbox" name="dores" value="Falta de rastreabilidade" /><span>Sem rastreabilidade</span></label>
+                  <label><input type="checkbox" name="dores" value="Dados inconsistentes" /><span>Dados inconsistentes</span></label>
+                  <label><input type="checkbox" name="dores" value="Depende de uma única pessoa" /><span>Depende de 1 pessoa</span></label>
+                  <label><input type="checkbox" name="dores" value="Custo alto" /><span>Custo alto</span></label>
+                  <label><input type="checkbox" name="dores" value="Dificuldade de treinar novos" /><span>Difícil treinar novos</span></label>
+                  <label><input type="checkbox" name="dores" value="Risco de compliance" /><span>Risco de compliance</span></label>
+                  <label><input type="checkbox" name="dores" value="Alto volume" /><span>Alto volume</span></label>
+                  <label><input type="checkbox" name="dores" value="Equipe pequena" /><span>Equipe pequena</span></label>
+                </div>
+              </label>
+
+              <label class="field field--full">
+                <span>Como você imagina que seria a automação ideal?</span>
+                <small>O que ela resolveria, o que ficaria pronto no final, como você gostaria que o processo acontecesse. Imagine e escreva.</small>
+                <textarea name="visao_automacao" id="f-visao" rows="3" placeholder="ex.: O ERP entende a nota sozinho, lança e só me aciona quando algo estiver fora do padrão."></textarea>
+              </label>
+            </div>
+          </section>
+
+          <!-- ───── ETAPA 5 · VOLUME ───── -->
+          <section class="step" data-step="4" aria-labelledby="s5-title" hidden>
+            <div class="step__head">
+              <p class="kicker">Etapa 5</p>
+              <h3 id="s5-title">Volume e pessoas envolvidas</h3>
+              <p class="step__sub">Informe os números estimados do processo que deseja automatizar.</p>
+            </div>
+
+            <div class="step__grid">
+              <label class="field">
+                <span>Frequência de execução</span>
+                <select name="frequencia" id="f-freq">
+                  <option value="" disabled selected>Com que frequência acontece?</option>
+                  <option value="Várias vezes ao dia" data-mes="60">Várias vezes ao dia</option>
+                  <option value="Diária" data-mes="22">Diária (dias úteis)</option>
+                  <option value="Semanal" data-mes="4">Semanal</option>
+                  <option value="Quinzenal" data-mes="2">Quinzenal</option>
+                  <option value="Mensal" data-mes="1">Mensal</option>
+                  <option value="Esporádica" data-mes="0.5">Esporádica</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Volume por execução</span>
+                <input type="number" name="volume" id="f-volume" min="1" placeholder="ex.: 50 notas" />
+                <small>Quantos registros, pedidos, notas, lançamentos executados na frequência informada.</small>
+              </label>
+              <label class="field">
+                <span>Tempo médio por execução (por pessoa)</span>
+                <div class="inline-input">
+                  <input type="number" name="tempo_valor" id="f-tempo-valor" min="1" placeholder="ex.: 30" />
+                  <select name="tempo_unidade" id="f-tempo-unidade">
+                    <option value="min">minutos</option>
+                    <option value="h">horas</option>
+                  </select>
+                </div>
+              </label>
+              <label class="field">
+                <span>Nº de pessoa(s) envolvida(s)</span>
+                <input type="number" name="pessoas_qtd" id="f-pessoas-qtd" min="1" placeholder="ex.: 3" />
+              </label>
+              <label class="field field--full">
+                <span>Quais papéis / cargos participam?</span>
+                <input type="text" name="pessoas_papeis" id="f-pessoas-papeis" placeholder="ex.: Analista financeiro, Assistente, Gerente" />
+              </label>
+
+              <!-- Estimador automático -->
+              <div class="estimator field--full" id="estimator" hidden>
+                <div class="estimator__row">
+                  <span class="estimator__label">Estimativa baseada nos dados preenchidos</span>
+                  <span class="estimator__brand">Prévia Lumova</span>
+                </div>
+                <div class="estimator__grid">
+                  <div>
+                    <p class="estimator__num" id="est-horas">—</p>
+                    <p class="estimator__cap">horas / mês por pessoa</p>
+                  </div>
+                  <div>
+                    <p class="estimator__num estimator__num--blue" id="est-registros">—</p>
+                    <p class="estimator__cap">registros / mês</p>
+                  </div>
+                  <div>
+                    <p class="estimator__num estimator__num--white" id="est-pessoas">—</p>
+                    <p class="estimator__cap">pessoa(s) envolvida(s)</p>
+                  </div>
+                  <div class="estimator__total">
+                    <p class="estimator__num" id="est-total">—</p>
+                    <p class="estimator__cap">total de horas / mês</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ───── ETAPA 6 · ANEXOS & ENVIO ───── -->
+          <section class="step" data-step="5" aria-labelledby="s6-title" hidden>
+            <div class="step__head">
+              <p class="kicker">Etapa 6</p>
+              <h3 id="s6-title">Anexos importantes</h3>
+              <p class="step__sub">Prints das telas ou planilhas valem por páginas de descrição. Até 6 arquivos, 5 MB cada.</p>
+            </div>
+
+            <div class="step__grid">
+              <!-- Upload com drag & drop -->
+              <div class="field field--full">
+                <span>Prints / anexos (opcional)</span>
+                <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Clique ou arraste arquivos aqui">
+                  <input type="file" id="f-files" name="files" multiple accept="image/*,application/pdf" hidden />
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+                  <p><strong>Arraste</strong> arquivos aqui ou <u>clique para escolher</u></p>
+                  <small>PNG, JPG ou PDF — até 6 arquivos, 5 MB cada</small>
+                </div>
+                <ul class="file-list" id="file-list"></ul>
+              </div>
+
+              <label class="field field--full">
+                <span>Observações finais</span>
+                <textarea name="observacoes" id="f-obs" rows="3" placeholder="Qualquer coisa que não perguntamos e você acha importante."></textarea>
+              </label>
+
+              <label class="field field--full">
+                <span>Prazo desejado para o projeto</span>
+                <div class="chips chips--radio" data-chip-group="prazo">
+                  <label><input type="radio" name="prazo" value="O quanto antes" /><span>O quanto antes</span></label>
+                  <label><input type="radio" name="prazo" value="Em até 30 dias" /><span>Em até 30 dias</span></label>
+                  <label><input type="radio" name="prazo" value="Em até 90 dias" /><span>Em até 90 dias</span></label>
+                  <label><input type="radio" name="prazo" value="Sem prazo definido" /><span>Sem prazo definido</span></label>
+                </div>
+              </label>
+
+              <!-- Resumo antes de enviar -->
+              <div class="summary field--full" id="summary">
+                <p class="summary__title">Revisão rápida antes de enviar</p>
+                <dl class="summary__list" id="summary-list"></dl>
+              </div>
+
+              <!-- Honeypot -->
+              <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            </div>
+
+            <p class="form__error" id="form-error" role="alert" hidden></p>
+          </section>
+
+          <!-- Navegação -->
+          <div class="wizard__nav">
+            <button type="button" class="btn btn--ghost" id="btn-prev" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Voltar
+            </button>
+            <button type="button" class="btn btn--primary" id="btn-next">
+              Continuar
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <button type="submit" class="btn btn--primary" id="btn-submit" hidden>
+              Enviar solicitação
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </form>
+
+        <!-- Sucesso -->
+        <div class="success" id="success" hidden>
+          <span class="success__check" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+          <h2>A Lumova agradece pela solicitação.</h2>
+          <p>Em breve entraremos em contato.</p>
+          <div class="success__actions">
+            <a href="../../index.html" class="btn btn--ghost">Voltar ao site</a>
+            <button type="button" class="btn btn--primary" id="btn-new">Enviar outra solicitação</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__bottom">
+      <span>© <span id="year">2026</span> Lumova. Todos os direitos reservados.</span>
+      <span class="footer__tagline">IA <i class="dot dot--orange"></i> Processos <i class="dot dot--blue"></i> Resultados</span>
+    </div>
+  </footer>
+
+  <!-- Template de etapa do processo (clonado via JS) -->
+  <template id="tpl-step">
+    <li class="builder__item">
+      <input type="text" class="js-step-desc" placeholder="Ex.: Gerar relatório do ERP xxx; Gerar relatório da Receita Federal; Conferir cada NF nos dois relatórios; Lançar NF" />
+      <button type="button" class="builder__remove" aria-label="Remover etapa">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </li>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
