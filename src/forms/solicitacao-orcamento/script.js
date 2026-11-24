@@ -51,7 +51,7 @@
 
   let active = 0;
 
-  const showStep = (i) => {
+  const showStep = (i, doScroll = true) => {
     active = Math.max(0, Math.min(i, steps.length - 1));
     steps.forEach((s, idx) => {
       const show = idx === active;
@@ -73,8 +73,15 @@
     btnSubmit.hidden = !last;
 
     if (last) renderSummary();
-    window.scrollTo({ top: document.querySelector('.wizard__progress').offsetTop - 100, behavior: 'smooth' });
+    if (doScroll) scrollToWizard();
   };
+
+  const scrollToWizard = () => {
+    const top = document.querySelector('.wizard__progress').getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  };
+
+  document.getElementById('btn-start').addEventListener('click', scrollToWizard);
 
   const validateStep = () => {
     const step = steps[active];
@@ -417,7 +424,8 @@
 
   /* ═════ INIT ═════ */
   restoreDraft();
-  showStep(0);
+  showStep(0, false);
+  window.scrollTo({ top: 0 });
 
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
