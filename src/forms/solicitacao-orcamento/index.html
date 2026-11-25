@@ -312,9 +312,9 @@
               </label>
 
               <!-- Construtor de etapas: uma linha por etapa, descrição livre e objetiva -->
-              <div class="field field--full step-builder">
-                <span>Etapas do processo, passo a passo</span>
-                <small>Descreva de forma objetiva o que acontece em cada etapa. Uma por vez.</small>
+              <div class="field field--full step-builder" id="builder-field">
+                <span>Etapas do processo, passo a passo *</span>
+                <small>Descreva de forma objetiva o que acontece em cada etapa. Uma por vez. Informe pelo menos 2 etapas.</small>
 
                 <ol class="builder__list" id="builder-list">
                   <!-- preenchido dinamicamente -->
@@ -498,7 +498,7 @@
         </form>
 
         <!-- Sucesso -->
-        <div class="success" id="success" hidden>
+        <div class="success" id="success" tabindex="-1" hidden>
           <span class="success__check" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
           </span>

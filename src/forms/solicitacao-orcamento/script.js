@@ -87,19 +87,43 @@
     const step = steps[active];
     const required = step.querySelectorAll('[required]');
     let firstInvalid = null;
+    let firstInvalidField = null;
     step.querySelectorAll('.is-invalid').forEach((f) => f.classList.remove('is-invalid'));
     required.forEach((input) => {
       const ok = input.value.trim() !== '' && input.checkValidity();
       input.closest('.field').classList.toggle('is-invalid', !ok);
       if (!ok && !firstInvalid) firstInvalid = input;
     });
-    if (firstInvalid) {
+
+    // Etapa 3 (processo): exige ao menos 2 etapas preenchidas no builder
+    let builderError = '';
+    if (step.contains(builderList)) {
+      const filled = readSteps();
+      const builderField = document.getElementById('builder-field');
+      const needsMore = filled.length < 2;
+      builderField.classList.toggle('is-invalid', needsMore);
+      if (needsMore) {
+        builderError = filled.length === 0
+          ? 'Descreva pelo menos 2 etapas do processo.'
+          : 'Adicione mais uma etapa do processo (mínimo 2).';
+        if (!firstInvalid) firstInvalidField = builderField;
+      }
+    }
+
+    if (firstInvalid || firstInvalidField) {
       errorEl.hidden = false;
-      errorEl.textContent = 'Preencha os campos destacados para continuar.';
-      const field = firstInvalid.closest('.field');
+      errorEl.textContent = builderError && !firstInvalid
+        ? builderError
+        : 'Preencha os campos destacados para continuar.';
+      const field = firstInvalid ? firstInvalid.closest('.field') : firstInvalidField;
       if (field) field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const chip = firstInvalid.type === 'radio' || firstInvalid.type === 'checkbox';
-      if (!chip) { try { firstInvalid.focus({ preventScroll: true }); } catch (_) {} }
+      if (firstInvalid) {
+        const chip = firstInvalid.type === 'radio' || firstInvalid.type === 'checkbox';
+        if (!chip) { try { firstInvalid.focus({ preventScroll: true }); } catch (_) {} }
+      } else {
+        const input = firstInvalidField.querySelector('.js-step-desc');
+        if (input) { try { input.focus({ preventScroll: true }); } catch (_) {} }
+      }
       return false;
     }
     errorEl.hidden = true;
@@ -125,6 +149,12 @@
   const builderAdd = document.getElementById('builder-add');
   const tpl = document.getElementById('tpl-step');
 
+  const refreshBuilderValidity = () => {
+    const field = document.getElementById('builder-field');
+    if (!field || !field.classList.contains('is-invalid')) return;
+    if (readSteps().length >= 2) field.classList.remove('is-invalid');
+  };
+
   const addStep = (data = {}) => {
     const node = tpl.content.firstElementChild.cloneNode(true);
     const desc = typeof data === 'string' ? data : data.desc;
@@ -133,8 +163,12 @@
       node.remove();
       if (!builderList.children.length) addStep();
       saveDraft();
+      refreshBuilderValidity();
     });
-    node.querySelectorAll('input').forEach((i) => i.addEventListener('input', saveDraft));
+    node.querySelectorAll('input').forEach((i) => {
+      i.addEventListener('input', saveDraft);
+      i.addEventListener('input', refreshBuilderValidity);
+    });
     builderList.appendChild(node);
   };
   builderAdd.addEventListener('click', () => { addStep(); saveDraft(); });
@@ -265,10 +299,12 @@
     }, 400);
   };
 
+  const seedSteps = () => { addStep(); addStep(); };
+
   const restoreDraft = () => {
     let raw;
     try { raw = localStorage.getItem(STORAGE_KEY); } catch (_) { return; }
-    if (!raw) { addStep(); return; }
+    if (!raw) { seedSteps(); return; }
     try {
       const data = JSON.parse(raw);
       Object.entries(data).forEach(([k, v]) => {
@@ -286,11 +322,12 @@
       });
       if (Array.isArray(data.etapas) && data.etapas.length) {
         data.etapas.forEach((s) => addStep(s));
+        while (builderList.children.length < 2) addStep();
       } else {
-        addStep();
+        seedSteps();
       }
       recalc();
-    } catch (_) { addStep(); }
+    } catch (_) { seedSteps(); }
   };
 
   form.addEventListener('input', saveDraft);
@@ -396,7 +433,9 @@
       document.querySelector('.wizard__progress').hidden = true;
       document.querySelector('.wizard__tabs').hidden = true;
       successEl.hidden = false;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const successTop = successEl.getBoundingClientRect().top + window.scrollY - 24;
+      window.scrollTo({ top: Math.max(0, successTop), behavior: 'smooth' });
+      try { successEl.focus({ preventScroll: true }); } catch (_) {}
     } catch (err) {
       console.error('Erro ao enviar:', err);
       errorEl.hidden = false;
@@ -413,7 +452,7 @@
     files.length = 0;
     renderFiles();
     builderList.innerHTML = '';
-    addStep();
+    seedSteps();
     estimator.hidden = true;
     form.hidden = false;
     document.querySelector('.wizard__progress').hidden = false;
