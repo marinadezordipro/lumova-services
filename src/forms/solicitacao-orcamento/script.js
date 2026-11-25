@@ -7,7 +7,7 @@
   'use strict';
 
   /* ═════ CONFIG ═════ */
-  const SHEET_ENDPOINT = ''; // cole aqui a URL do Web App do Google Apps Script
+  const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyxE95P5RFKHsTFpDXpwvhGlz8FPrWdIwGZoS3PuFP5RWIr4fxZCop4pHzmAvhBlmvg/exec'; // cole aqui a URL do Web App do Google Apps Script
   const CONTACT_EMAIL = 'contato@lumova.com.br';
   const STORAGE_KEY = 'lumova_orc_draft_v2';
   const MAX_FILES = 6;
