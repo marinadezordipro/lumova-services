@@ -46,9 +46,12 @@ const HEADERS_ETAPAS = [
 
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) {
+    throw new Error('Este projeto Apps Script não está vinculado a uma planilha. Abra sua planilha no Google Sheets e entre em Extensões → Apps Script a partir dela.');
+  }
   ensureSheet(ss, SHEET_SOLICITACOES, HEADERS_SOLICITACOES);
   ensureSheet(ss, SHEET_ETAPAS, HEADERS_ETAPAS);
-  SpreadsheetApp.getUi().alert('Abas prontas. Agora publique o Web App em "Implantar".');
+  Logger.log('Abas prontas: "%s" e "%s". Agora publique o Web App em "Implantar".', SHEET_SOLICITACOES, SHEET_ETAPAS);
 }
 
 function ensureSheet(ss, name, headers) {
