@@ -17,7 +17,7 @@
  *  - Envia um e-mail de notificação para NOTIFY_EMAIL com o link do Doc.
  */
 
-const NOTIFY_EMAIL = 'contato@lumova.com.br';
+const NOTIFY_EMAIL = 'kelymarinaia@gmail.com';
 const DRIVE_FOLDER_NAME = 'Lumova · Orçamentos';
 const DOCS_FOLDER_NAME = 'Resumos de orçamento';
 const ANEXOS_FOLDER_NAME = 'Anexos';
